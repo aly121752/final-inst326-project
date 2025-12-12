@@ -1,0 +1,7 @@
+student_id,name,major,classes
+s001,John Kirk,Information Science,"INST326,ENGL101"
+s002,Sarah Williams,Computer Science,"INST326,CMSC131"
+s003,Maria Rodriguez,Business Administration,"INST326,BMGT110"
+s004,David Chen,Data Science,"CMSC131,DATA100"
+s005,Emily Patel,Engineering,"CMSC131,ENES100"
+

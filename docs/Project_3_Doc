@@ -1,0 +1,150 @@
+1. Inheritance Hierarchies and Rationale
+
+The system is designed using object-oriented programming principles to support modular, reusable, and extendable components.
+The class hierarchy is centered on the abstract base class User, which defines shared attributes and behaviors.
+
+User (abstract)
+│
+├── Student
+│
+└── Teacher
+
+User (Base Class)
+
+Represents any system participant.
+
+Defines shared fields: user_id, name, email
+
+Defines shared behavior: login(), logout(), get_role()
+
+Student (Child Class)
+
+Inherits from User
+
+Adds student-specific capabilities:
+
+Viewing assignments and grades
+
+Filtering grades
+
+Rationale for inheritance:
+
+A student is-a user, so extending the User parent avoids duplicated code.
+
+Teacher (Child Class)
+
+Inherits from User
+
+Adds teacher-specific capabilities:
+
+Managing assignments and grades
+
+Filtering students
+
+Rationale:
+
+A teacher is-a user. Shared authentication and identity are inherited.
+
+Rationale behind the hierarchy
+
+Inheritance prevents redundant fields and functions across Student and Teacher classes. All shared logic for authentication and identity is centralized inside User, while each subclass specializes behaviors rather than duplicating them.
+
+2. Polymorphic Methods — Why They Are Polymorphic
+
+Several overridden methods exhibit polymorphism:
+
+Base Method	Student Override	Teacher Override
+dashboard()	Shows grades, feedback, assignments	Shows grading tools, student monitoring
+get_role()	returns "Student"	returns "Teacher"
+Why they are polymorphic
+
+Same method signature, different behaviors depending on the object's runtime type.
+
+The system can call dashboard() without needing to know whether the logged-in user is a student or teacher — reducing coupling and eliminating if/else checks.
+
+Supports future expansion (e.g., Parent, Admin) without modifying existing code.
+
+3. Composition vs. Inheritance Decisions
+
+Inheritance was used only when there was an “is-a” relationship.
+Composition was used when an object “has-a” relationship to another object.
+
+Component	Relationship Type	Explanation
+Student → Grades	Composition	A student has grades; grades are not a subclass of student
+Teacher → ClassRoster	Composition	A teacher has a collection of students
+LibrarySystem → Users	Composition	The library owns and aggregates users
+User → LoginSession	Association	Users participate in session tracking but do not own the session
+Why composition was used
+
+Grades and classes should not inherit from Student or Teacher
+
+They are independent domain objects that can exist without users
+
+Composition allows encapsulation and modularity
+
+Rule used: If we need code reuse due to similarity → inheritance.
+If we need organizational ownership (one object contains another) → composition.
+
+4. Design Pattern Usage
+
+The system incorporates multiple software design patterns.
+
+🔹 Factory Pattern
+
+User creation can be handled by a factory method:
+
+def create_user(role, data):
+    if role == "student": return Student(...)
+    if role == "teacher": return Teacher(...)
+
+
+Ensures the main program never needs to know the specific constructor of subclasses
+
+Supports future role types without breaking existing logic
+
+🔹 Strategy Pattern (Filtering System)
+
+The filtering module allows dynamically selecting a filtering rule at runtime:
+
+Filter by grade category
+
+Filter by class
+
+Filter by percentage range
+
+Each filter is treated as a strategy — swappable logic without modifying core Student or Teacher objects.
+
+🔹 Singleton Pattern (Library System)
+
+Only one instance of the main library/class system should exist.
+
+Avoids inconsistent states
+
+Central point for user registration and login services
+
+1. Library / Core Class System
+
+The core library of the system is built around an inheritance hierarchy that models users in an academic environment. The abstract base class User holds properties shared by all system participants, such as user_id, name, and email, and defines common behaviors such as login(), logout(), and the abstract method dashboard(). Using inheritance, Student and Teacher extend the functionality of User rather than recreate it. This prevents duplicated identity/authorization logic and ensures consistency across all user types. Polymorphism occurs when the system calls dashboard() on a User reference: if the actual object is a Student, the student version of the dashboard is displayed; if the object is a Teacher, the teacher version displays — the call site does not need to know the object type. The output is dynamically determined at runtime, demonstrating real polymorphic behavior and supporting easy expansion if Admin or Parent roles are added later. This design enables the library system to authenticate users generically while displaying personalized, role-appropriate content.
+
+2. Grade Management System
+
+The grade management module uses a combination of composition and inheritance to store and manipulate academic performance. Rather than inheriting from students or teachers, grades are composed into a student's record, because a student has grades — a grade is not a type of student. The Teacher class exposes methods like add_grade(), update_grade(), and delete_grade(), where the teacher evaluates Assignment objects (another hierarchy) that store points, max_points, and computed values like percentage and letter_grade. Polymorphism appears when different assignment types (Homework, Quiz, Exam) override the method that calculates scores — e.g., Exams may apply scaling or curves while Homework may include completion points. At runtime, the teacher interacts with all assignment objects through the parent type, yet the program calls the correct overridden method automatically. The visual output of this module typically includes printed confirmations such as:
+➡ "Added grade for Homework 1 in Biology for Marcus."
+➡ "Updated Exam 2 in Math for Sofia to 92%"
+Thus, behavior depends on the object being acted on while interactions remain uniform.
+
+3. Filtering / Analytics System
+
+The filtering module functions as a strategy system that analyzes grade records using multiple interchangeable criteria, such as: by score range, by student, by week, by assignment type, and late submissions. These filters are implemented as standalone functions (rather than subclasses of Student) because filtering behavior does not define what a student is, it defines something the system does with data — therefore composition and functional decomposition are more appropriate than inheritance. The filters demonstrate polymorphism in the sense that they accept any list of grade dictionaries with different assignment subtypes, because each assignment implements the same interface (assignment_type, score, is_late, etc.). The same filtering function can operate on Homework, Quiz, Exam objects even though they compute scores differently. The expected outputs are lists of filtered grade dictionaries. For example:
+➡ filter_by_assignment_type(grades, "quiz") → returns only quizzes
+➡ filter_late_submissions(grades) → returns only late work
+➡ filter_by_score_range(grades, 80, 100) → returns high-performing submissions
+These filtering utilities make analysis scalable and provide teachers and students real-time insights.
+
+4. General Utility / Functional Module
+
+This subsystem contains the supporting functions that operate across the entire architecture. Instead of belonging to a specific class, they interact with the system as a whole and manipulate structured objects. For example, general functions such as calculate_gpa(), get_missing_assignments(), or class_average() iterate over composed grade objects and use polymorphic score calculations from the assignment subclasses. The key architectural idea here is loose coupling: these functions never assume the object is a Homework, a Quiz, or an Exam — they simply call the parent-class method (e.g., .get_percentage()) and allow the subclass to decide how the result is computed. This lets the utilities work even if new assignment subclasses are added later. Outputs from this module often include analytics summaries such as:
+➡ "Overall GPA for Mia: 3.74"
+➡ "Students missing assignments: Alex, Jordan, Priya"
+➡ "Class Average on Exam 1: 84.6%"
+These utilities bridge all system parts without violating encapsulation, giving our program both power and flexibility.

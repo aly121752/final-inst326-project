@@ -1,0 +1,23 @@
+student_id,student_name,class_name,assignment_name,assignment_type,points,max_points,week
+s001,John Kirk,INST326,Lab 1,homework,18,20,1
+s001,John Kirk,INST326,Lab 2,homework,19,20,2
+s001,John Kirk,INST326,Quiz 1,quiz,9,10,3
+s001,John Kirk,INST326,Project 1,project,85,100,5
+s001,John Kirk,INST326,Midterm,exam,88,100,8
+s002,Sarah Williams,INST326,Lab 1,homework,20,20,1
+s002,Sarah Williams,INST326,Lab 2,homework,18,20,2
+s002,Sarah Williams,INST326,Quiz 1,quiz,10,10,3
+s002,Sarah Williams,INST326,Project 1,project,92,100,5
+s002,Sarah Williams,INST326,Midterm,exam,95,100,8
+s003,Maria Rodriguez,INST326,Lab 1,homework,17,20,1
+s003,Maria Rodriguez,INST326,Lab 2,homework,16,20,2
+s003,Maria Rodriguez,INST326,Quiz 1,quiz,7,10,3
+s003,Maria Rodriguez,INST326,Project 1,project,78,100,5
+s003,Maria Rodriguez,INST326,Midterm,exam,82,100,8
+s004,David Chen,CMSC131,Assignment 1,homework,95,100,1
+s004,David Chen,CMSC131,Quiz 1,quiz,9,10,2
+s004,David Chen,CMSC131,Project 1,project,88,100,6
+s005,Emily Patel,CMSC131,Assignment 1,homework,90,100,1
+s005,Emily Patel,CMSC131,Quiz 1,quiz,8,10,2
+s005,Emily Patel,CMSC131,Project 1,project,85,100,6
+
