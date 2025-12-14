@@ -390,7 +390,9 @@ datastore.export_grades_to_csv(gradebook, "grades.csv")
 
 ## Video Presentation
 
-[Link to presentation video - TBD]
+[[Link to presentation video - TBD]
+
+](https://youtu.be/pN7FpXOSvrs)
 
 ## License
 
